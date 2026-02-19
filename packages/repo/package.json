@@ -1,0 +1,42 @@
+{
+  "name": "@opengov/repo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "@opengov/source": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "@opengov/source": "./src/*.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf ./tsconfig.tsbuildinfo",
+    "build": "tsc --build tsconfig.json",
+    "db:generate": "bun --bun drizzle-kit generate --config=./drizzle/drizzle.config.ts",
+    "db:migrate": "bun --bun drizzle-kit push --config=./drizzle/drizzle.config.ts",
+    "db:start": "pgserve --host ${DB_HOST:-127.0.0.1} ${DB_PORT:+--port $DB_PORT}",
+    "db:setup": "bun run scripts/setup-db.ts"
+  },
+  "dependencies": {
+    "@effect/experimental": "catalog:",
+    "@effect/platform": "catalog:",
+    "@effect/platform-bun": "catalog:",
+    "@effect/sql": "catalog:",
+    "@effect/sql-drizzle": "catalog:",
+    "@effect/sql-pg": "catalog:",
+    "@opengov/protocol": "workspace:^",
+    "drizzle-orm": "catalog:",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "drizzle-kit": "^0.31.8",
+    "pgserve": "^1.1.5",
+    "rimraf": "^6.0.1",
+    "typescript": "catalog:"
+  }
+}

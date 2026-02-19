@@ -1,0 +1,34 @@
+{
+  "name": "@opengov/backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "@opengov/source": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "@opengov/source": "./src/*.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf ./tsconfig.tsbuildinfo",
+    "build": "tsc --build tsconfig.json",
+    "dev": "bun --watch src/main.ts"
+  },
+  "dependencies": {
+    "@effect/platform": "catalog:",
+    "@effect/platform-bun": "catalog:",
+    "@effect/sql-drizzle": "catalog:",
+    "@opengov/protocol": "workspace:^",
+    "@opengov/repo": "workspace:^",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "rimraf": "^6.0.1",
+    "typescript": "catalog:"
+  }
+}

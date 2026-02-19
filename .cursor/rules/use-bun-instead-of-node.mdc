@@ -1,0 +1,77 @@
+---
+description: Guidelines for using Bun instead of Node.js, npm, yarn, or pnpm
+globs: **/*
+alwaysApply: true
+---
+
+# Bun Runtime Guidelines
+
+This project uses Bun as the JavaScript/TypeScript runtime. Follow these guidelines:
+
+## Package Management
+
+- Use `bun install` instead of `npm install`, `yarn`, or `pnpm install`
+- Use `bun add <package>` instead of `npm install <package>`
+- Use `bun remove <package>` instead of `npm uninstall <package>`
+- Use `bun --filter '*' <script>` for running scripts across workspaces
+
+## Running Scripts
+
+- Use `bun run <script>` or just `bun <script>` instead of `npm run <script>`
+- Use `bun <file.ts>` to run TypeScript files directly (no compilation needed)
+- Use `bun --watch <file.ts>` for development with hot reload
+
+## Testing
+
+- Use `bun test` instead of `jest`, `vitest`, or `mocha`
+- Tests use `bun:test` imports:
+  ```typescript
+  import { describe, expect, test } from 'bun:test';
+  ```
+
+## Environment Variables
+
+- Bun auto-loads `.env` files
+- Use `bun --env-file=.env <script>` for explicit env file loading
+- Access via `process.env.VAR_NAME` or `Bun.env.VAR_NAME`
+
+## Building
+
+- Use `bun build` for bundling instead of webpack/esbuild/rollup
+- TypeScript compilation still uses `tsc` for type checking and declarations
+
+## Key Differences from Node.js
+
+1. **Native TypeScript** - No need for ts-node or tsx
+2. **Faster installs** - Package installation is significantly faster
+3. **Built-in test runner** - No need for external test frameworks
+4. **Auto .env loading** - Environment files loaded automatically
+
+## Don't Use
+
+- `node` or `ts-node` to run files
+- `npm`, `yarn`, or `pnpm` for package management
+- `jest`, `vitest`, or `mocha` for testing
+- `npx` - use `bunx` instead
+
+## Example Commands
+
+```bash
+# Install dependencies
+bun install
+
+# Run development server
+bun run dev
+
+# Run tests
+bun test
+
+# Run a TypeScript file directly
+bun src/main.ts
+
+# Add a package
+bun add effect
+
+# Build all packages
+bun --filter '*' build
+```

@@ -1,0 +1,8 @@
+**/dist
+**/build
+**/node_modules
+**/.git
+**/coverage
+**/.react-router
+*.min.js
+*.bundle.js

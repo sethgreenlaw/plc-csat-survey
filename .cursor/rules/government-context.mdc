@@ -1,0 +1,65 @@
+---
+description: Domain context for building government software at OpenGov
+globs: packages/frontend/src/**/*.tsx
+alwaysApply: true
+---
+
+# Government Software Context
+
+When building features, consider the government domain context in `context/`.
+
+## User Personas (context/personas.md)
+
+Design for varying technical abilities:
+
+| Role | Tech Level | Design Approach |
+|------|-----------|-----------------|
+| Maintenance Worker | Low | Simple interfaces, large touch targets, mobile-first |
+| Permit Reviewer | Mid | Efficient workflows, progressive disclosure |
+| Budget Director | Mid | Cross-department views, scenario planning |
+| IT Director | High | Keyboard shortcuts, bulk operations, integrations |
+
+## Product Suites (context/suite-scope.md)
+
+| Suite | Purpose | Key Features |
+|-------|---------|--------------|
+| B&P | Budgeting & Planning | Proposals, approvals, scenario planning |
+| EAM | Asset Management | Work orders, inspections, GIS mapping |
+| PLC | Permitting & Licensing | Intake, review, payment, inspection workflow |
+| PRO | Procurement | Solicitations, vendor management, contracts |
+| FIN | Financials | GL, AP, AR, Payroll, Purchasing |
+
+## Design Guidelines
+
+### For Low-Tech Users
+- Clear visual hierarchy
+- Minimal cognitive load
+- Large click/touch targets
+- Simple navigation
+- Avoid technical jargon
+
+### For Mid-Tech Users
+- Efficient workflows
+- Progressive disclosure of advanced features
+- Keyboard + mouse support
+- Contextual help
+
+### For High-Tech Users
+- Keyboard shortcuts
+- Bulk operations
+- API/integration capabilities
+- Power user features
+
+### Mobile Considerations
+- Field workers (Maintenance, Inspectors) need mobile-optimized interfaces
+- Offline capability for fieldwork
+- Camera/location integration for inspections
+
+## Domain Terminology
+
+Use government-appropriate language:
+- "Citizen" or "Applicant" (not "User")
+- "Department" or "Agency" (not "Team")
+- "Fiscal Year" (not "Calendar Year" for budgets)
+- "Work Order" (not "Ticket")
+- "Solicitation" (not "Bid Request")

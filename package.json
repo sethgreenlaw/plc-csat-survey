@@ -1,0 +1,59 @@
+{
+  "name": "@opengov/opengov-template-example",
+  "description": "OpenGov Template Example Monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "packageManager": "bun@1.3.5",
+  "scripts": {
+    "dev": "cd packages/backend && bun --env-file=../../.env run dev",
+    "build": "bun --filter '*' build",
+    "clean": "bun --filter '*' clean && rm -rf node_modules tsconfig.tsbuildinfo",
+    "reset": "bun install && bun run build",
+    "test": "bun test",
+    "db:start": "pgserve --host ${DB_HOST:-127.0.0.1} ${DB_PORT:+--port $DB_PORT}",
+    "db:setup": "cd packages/repo && bun --env-file=../../.env run db:setup",
+    "db:generate": "cd packages/repo && bun --env-file=../../.env run db:generate",
+    "db:migrate": "cd packages/repo && bun --env-file=../../.env run db:migrate",
+    "frontend:dev": "cd packages/frontend && bun run dev",
+    "dev:mock": "./scripts/dev-mock.sh",
+    "frontend:build": "cd packages/frontend && bun run build",
+    "lint": "eslint --cache ./packages",
+    "lint:fix": "eslint --fix ./packages",
+    "format:check": "prettier . --check",
+    "format:fix": "prettier . --write",
+    "typecheck": "tsc --noEmit"
+  },
+  "catalog": {
+    "@effect/experimental": "^0.58.0",
+    "@effect/platform": "^0.94.0",
+    "@effect/platform-bun": "^0.87.0",
+    "@effect/sql": "^0.49.0",
+    "@effect/sql-drizzle": "^0.48.0",
+    "@effect/sql-pg": "^0.50.0",
+    "@types/bun": "latest",
+    "drizzle-orm": "^0.45.1",
+    "effect": "^3.19.13",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.3.2",
+    "@eslint/eslintrc": "^3.3.1",
+    "@types/bun": "catalog:",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "typescript": "catalog:",
+    "typescript-eslint": "^8.43.0"
+  },
+  "workspaces": [
+    "packages/protocol",
+    "packages/repo",
+    "packages/backend",
+    "packages/frontend"
+  ]
+}

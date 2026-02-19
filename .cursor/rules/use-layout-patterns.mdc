@@ -1,0 +1,134 @@
+---
+description: Guidelines for using layout patterns when building React pages
+globs: packages/frontend/src/**/*.tsx
+alwaysApply: true
+---
+
+# Layout Pattern Guidelines
+
+When building new pages or components in the frontend, reference the layout patterns in `examples/layouts/`.
+
+## Available Layouts
+
+1. **StandardPageLayout** - Most pages with PageHeader + content area
+2. **TwoColumnLayout** - Details pages with 8/4 column split
+3. **ThreeColumnLayout** - Admin panels with 2/7/3 column split
+4. **CardGridLayout** - Responsive card grids (1→2→3→4 columns)
+5. **VerticalFormLayout** - Standard stacked form fields
+6. **HorizontalFormLayout** - Inline filters and search controls
+7. **ListWithItemsLayout** - Activity feeds, notifications
+8. **TabbedLayout** - Multi-section pages with tabs
+9. **CenteredContentLayout** - Login, 404, focused content
+10. **DashboardGridLayout** - Mixed-size dashboard widgets
+11. **DetailsPageLayout** - Profile/entity details with sidebar
+12. **DataTableLayout** - CRUD with OgGridTable
+
+## Key Rules
+
+### Use MUI Grid v2 Syntax
+
+```typescript
+// Correct - Use size prop
+<Grid size={{ xs: 12, md: 6 }}>Content</Grid>
+
+// Wrong - Old syntax
+<Grid xs={12} md={6}>Content</Grid>
+```
+
+### Use Theme Colors
+
+```typescript
+// Correct - Use theme
+const theme = useTheme();
+<Box sx={{ bgcolor: theme.palette.action.hover }}>
+
+// Wrong - Hardcoded colors
+<Box sx={{ bgcolor: '#f5f5f5' }}>
+```
+
+### Use Capital Design System Components
+
+```typescript
+// Page headers
+import { PageHeaderComposable } from '@opengov/components-page-header';
+
+// Data tables
+import { OgGridTable } from '@opengov/components-og-grid-table';
+
+// Icons
+import { Plus, Download, Magnify } from '@opengov/react-capital-assets';
+```
+
+### Use Stack for Simple Layouts
+
+```typescript
+// Vertical stack
+<Stack spacing={3}>
+  <Paper>Section 1</Paper>
+  <Paper>Section 2</Paper>
+</Stack>
+
+// Responsive horizontal/vertical
+<Stack
+  direction={{ xs: 'column', md: 'row' }}
+  spacing={2}
+>
+  <TextField />
+  <Button>Submit</Button>
+</Stack>
+```
+
+### Use Grid for Complex Multi-Column Layouts
+
+```typescript
+<Grid container spacing={3}>
+  <Grid size={{ xs: 12, md: 8 }}>
+    <Paper>Main content (8 cols)</Paper>
+  </Grid>
+  <Grid size={{ xs: 12, md: 4 }}>
+    <Paper>Sidebar (4 cols)</Paper>
+  </Grid>
+</Grid>
+```
+
+## Common Spacing
+
+- `spacing={3}` (24px) - Between major sections
+- `spacing={2}` (16px) - Between subsections
+- `spacing={1}` (8px) - Between related items
+- `p: 3` - Paper padding for sections
+- `p: 2` - Paper padding for filters/compact areas
+
+## When to Use Each Layout
+
+| Building... | Use This Layout |
+|------------|-----------------|
+| A new page with content | StandardPageLayout |
+| A details/profile page | TwoColumnLayout or DetailsPageLayout |
+| An admin dashboard | ThreeColumnLayout or DashboardGridLayout |
+| A product/project gallery | CardGridLayout |
+| A settings form | VerticalFormLayout |
+| A search/filter bar | HorizontalFormLayout |
+| An activity feed | ListWithItemsLayout |
+| Settings with sections | TabbedLayout |
+| Login/error pages | CenteredContentLayout |
+| A data management page | DataTableLayout |
+
+## Page Templates (examples/pages/)
+
+For full page implementations with state, routing, and CRUD operations:
+
+| Template | Use Case |
+|----------|----------|
+| BaseTemplate | Foundation wrapper with PageHeader |
+| ListPageTemplate | Data grid with search, filters, CRUD navigation |
+| DetailPageTemplate | Entity view with sidebar actions, dialogs |
+| FormPageTemplate | Create/edit form with validation, unsaved changes |
+
+Usage: Copy template, replace `ENTITY_NAME` placeholders, customize.
+
+## Domain Context (context/)
+
+Reference `context/` for OpenGov domain knowledge:
+- `personas.md` - User personas and tech fluency levels
+- `suite-scope.md` - Product suites (B&P, EAM, PLC, PRO, FIN)

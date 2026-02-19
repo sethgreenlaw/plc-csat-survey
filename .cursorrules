@@ -1,0 +1,193 @@
+# Cursor Rules for OpenGov Projects
+
+You are an expert TypeScript developer working on an OpenGov monorepo project using Bun, Effect-TS, Drizzle ORM, React, and MUI.
+
+## Core Principles
+
+1. **Type Safety First** - Never use `any` except in type constraints. Full type inference required.
+2. **Effect-TS Patterns** - Follow Effect-TS conventions for all backend code.
+3. **Functional Programming** - Prefer FP patterns over OOP.
+4. **Protocol-Driven Design** - APIs defined in protocol package, implemented in backend.
+5. **Bun Runtime** - Use Bun for all runtime operations, not Node.js.
+
+## Bun Guidelines
+
+- Use `bun` instead of `node`, `npm`, `yarn`, or `pnpm`
+- Run TypeScript directly: `bun src/main.ts`
+- Use `bun test` with `bun:test` imports for testing
+- Bun auto-loads `.env` files
+
+## Effect-TS Guidelines
+
+### Use Effect.fn for functions returning Effects
+```typescript
+// CORRECT
+const fetchUser = Effect.fn(function* (id: string) {
+  const user = yield* Effect.tryPromise(() => db.findUser(id));
+  return user;
+});
+
+// INCORRECT - don't wrap Effect.gen in a function
+const fetchUser = (id: string) =>
+  Effect.gen(function* () {
+    const user = yield* Effect.tryPromise(() => db.findUser(id));
+    return user;
+  });
+```
+
+### Prefer generator syntax over pipe
+```typescript
+// CORRECT
+const result = yield* Effect.tryPromise(() => fetch(url));
+const decoded = yield* Schema.decodeUnknown(MySchema)(result);
+
+// INCORRECT - pipe chains are harder to read
+yield* Effect.tryPromise(() => fetch(url)).pipe(
+  Effect.flatMap(Schema.decodeUnknown(MySchema))
+);
+```
+
+### Use Effect.tryPromise, not Effect.promise
+```typescript
+// CORRECT
+Effect.tryPromise(() => db.query.tasks.findFirst());
+
+// INCORRECT - doesn't handle errors
+Effect.promise(() => db.query.tasks.findFirst());
+```
+
+### Use Schema.make() for typed objects
+```typescript
+// CORRECT
+const user = UserSchema.make({ id: '1', name: 'John', email: 'john@example.com' });
+
+// INCORRECT - scattered type assertions
+const user = { id: '1' as const, name: 'John', email: 'john@example.com' };
+```
+
+## Drizzle ORM Guidelines
+
+### Schema Definition
+```typescript
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+
+export const users = pgTable('users', {
+  id: uuid().primaryKey().notNull().defaultRandom(),
+  email: text('email').notNull().unique(),
+  name: text('name').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull()
+});
+```
+
+### Repository Pattern with Effect
+```typescript
+export class UserRepo extends Effect.Service<UserRepo>()('UserRepo', {
+  effect: Effect.gen(function* () {
+    const drizzle = yield* PgDrizzle;
+    return {
+      findAll: Effect.fn('UserRepo.findAll')(function* () {
+        return yield* drizzle.select().from(users);
+      }),
+      // ... other methods
+    };
+  }),
+  dependencies: []
+}) {}
+```
+
+## React Guidelines
+
+### Extract state to custom hooks
+```typescript
+// src/hooks/useUsers.ts
+export const useUsers = () => {
+  const query = useQuery({ queryKey: ['users'], queryFn: fetchUsers });
+  return query;
+};
+
+// Component just renders
+export const UsersPage = () => {
+  const { data, isLoading } = useUsers();
+  // ... render
+};
+```
+
+### Use MUI components with Capital Design System
+- Use theme from `@opengov/capital-mui-theme` when available
+- Use MUI's `sx` prop for styling
+- Follow Material Design patterns
+
+## File Organization
+
+```
+packages/
+├── protocol/          # Shared types and API definitions
+│   └── src/
+│       ├── Api.ts     # HttpApi definitions
+│       ├── schemas/   # Effect Schema definitions
+│       └── errors/    # Error types
+├── repo/              # Database layer
+│   └── src/
+│       ├── schema.ts  # Drizzle schema
+│       ├── sql.ts     # SQL connection layer
+│       └── *-repo.ts  # Repository implementations
+├── backend/           # Effect Platform server
+│   └── src/
+│       ├── api/       # API implementations
+│       ├── main.ts    # Server entry point
+│       └── domain/    # Business logic
+└── frontend/          # React application
+    └── src/
+        ├── components/  # Reusable components
+        ├── pages/       # Route pages
+        └── hooks/       # Custom hooks
+```
+
+## API Pattern
+
+1. Define in protocol:
+```typescript
+export class MyApi extends HttpApiGroup.make('myApi')
+  .add(HttpApiEndpoint.get('list', '/items').addSuccess(Schema.Array(ItemSchema)))
+  .prefix('/api') {}
+```
+
+2. Implement in backend:
+```typescript
+export const MyApiLive = HttpApiBuilder.group(Api, 'myApi', (handlers) =>
+  handlers.handle('list', () => Effect.succeed(items))
+);
+```
+
+## Error Handling
+
+Always use typed errors:
+```typescript
+// Define
+export class NotFoundError extends Schema.TaggedError<NotFoundError>()('NotFoundError', {
+  message: Schema.String
+}) {}
+
+// Use
+if (!item) {
+  return yield* Effect.fail(new NotFoundError({ message: 'Item not found' }));
+}
+```
+
+## Code Quality
+
+- Run `bun run lint` before committing
+- Run `bun run format:fix` for consistent formatting
+- Run `bun run typecheck` to verify types
+- All tests must pass: `bun test`
+
+## Don't
+
+- Don't use `any` types
+- Don't use `// @ts-ignore` or `// @ts-expect-error`
+- Don't commit secrets or credentials
+- Don't skip tests for new features
+- Don't use `console.log` in production code (use Effect's logging)
+- Don't create circular dependencies between packages
+- Don't use Node.js APIs when Bun equivalents exist

@@ -1,0 +1,43 @@
+{
+  "name": "@opengov/frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "clean": "rimraf dist && rimraf ./tsconfig.tsbuildinfo",
+    "build": "tsc --build tsconfig.json && vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/lab": "^7.0.1-beta.21",
+    "@mui/material": "^7.1.0",
+    "@opengov/capital-assets": "^37.15.0",
+    "@opengov/capital-mui-theme": "^37.11.1",
+    "@opengov/components-nav-bar": "^37.10.2",
+    "@opengov/components-og-grid-table": "^37.5.1",
+    "@opengov/components-page-header": "^37.5.0",
+    "@opengov/components-label-value-pair": "^37.0.0-beta.1",
+    "@opengov/components-modal": "^37.0.0-beta.1",
+    "@opengov/components-result": "^37.0.2",
+    "@opengov/components-toolbar": "^37.0.0-beta.1",
+    "@opengov/protocol": "workspace:^",
+    "@opengov/react-capital-assets": "^37.15.0",
+    "@tanstack/react-query": "^5.87.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router": "^7.9.1"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.5.2",
+    "rimraf": "^6.0.1",
+    "typescript": "catalog:",
+    "vite": "^7.1.6"
+  }
+}

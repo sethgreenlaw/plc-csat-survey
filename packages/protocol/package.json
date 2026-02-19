@@ -1,0 +1,29 @@
+{
+  "name": "@opengov/protocol",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "@opengov/source": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "@opengov/source": "./src/*.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "scripts": {
+    "clean": "rimraf dist && rimraf ./tsconfig.tsbuildinfo",
+    "build": "tsc --build tsconfig.json"
+  },
+  "dependencies": {
+    "@effect/platform": "catalog:",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "rimraf": "^6.0.1",
+    "typescript": "catalog:"
+  }
+}
