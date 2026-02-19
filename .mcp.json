@@ -1,0 +1,33 @@
+{
+  "mcpServers": {
+    "aha-tools": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "/tmp/mcp-servers/aha-server.mjs"
+      ],
+      "env": {
+        "AHA_SUBDOMAIN": "opengov-roadmap",
+        "AHA_API_TOKEN": "YyN-ao-87tD1lvhZVyrQvQdxCp0N_iMsEbdG4reUOQM"
+      }
+    },
+    "ask-product-gpt": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "/tmp/mcp-servers/ask-product-gpt-server.mjs"
+      ],
+      "env": {
+        "OPENAI_API_KEY_MAIN": "\"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\",",
+        "OPENAI_API_KEY_PLC": "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"
+      }
+    },
+    "og-product-strategy": {
+      "type": "http",
+      "url": "https://og-product-hub.vercel.app/mcp",
+      "headers": {
+        "Authorization": "Bearer pmf-dashboard-api-key-2025"
+      }
+    }
+  }
+}

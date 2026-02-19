@@ -59,6 +59,13 @@ export const Layout = () => {
       url: '/',
       linkComponent: CustomLinkComponent,
       isActive: isActive('/')
+    },
+    {
+      id: 'settings',
+      label: 'Settings',
+      url: '/settings',
+      linkComponent: CustomLinkComponent,
+      isActive: isActive('/settings')
     }
   ];
 
@@ -66,7 +73,7 @@ export const Layout = () => {
    * NavBar configuration
    */
   const navBarOptions: INavBarOptions = {
-    appName: 'App Builder',
+    appName: 'Permitting & Licensing',
     menuOptions
   };
 

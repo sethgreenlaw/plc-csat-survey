@@ -1,0 +1,7 @@
+# Authentication for npm registry (primary - @opengov packages are here)
+[install.scopes]
+"@opengov" = { token = "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", url = "https://registry.npmjs.org/" }
+
+# Global registry settings
+[install]
+registry = "https://registry.npmjs.org/"
